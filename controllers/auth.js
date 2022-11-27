@@ -1,13 +1,23 @@
 import User from "../model/user.js"
 import {generateJwtById} from "../utils/jwt.js"
+import {validationResult} from "express-validator";
 
 export const register = async (req, res) => {
     try {
+        const error = validationResult(req)
+        if (error){
+            
+            res.status(400).json({
+                error: error
+            })
+            return
+        }
+
         const doc = new User({
             email: req.body.email,
             name: req.body.name,
             accessToken: "s",
-            passwordHash: "s",
+            passwordHash: req.body.password,
         })
 
         const user = await doc.save()
