@@ -2,14 +2,14 @@ import User from "../model/user.js"
 
 export const register = async (req, res) => {
     try {
-        const docu = new User({
+        const doc = new User({
             email: req.body.email,
             name: req.body.name,
             accessToken: "s",
             passwordHash: "s",
         })
 
-        const user = await docu.save()
+        const user = await doc.save()
         console.log(user.email, user.passwordHash, user.name)
 
         res.status(200).json(
