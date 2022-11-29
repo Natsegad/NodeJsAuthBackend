@@ -12,7 +12,7 @@ export const loginValidate = [
     body("password", "Password min len 3 max 25").isLength({min: 4, max: 25})
 ]
 
-export const loginReqValidator = (req, res, next) => {
+export const checkAuth = (req, res, next) => {
     try {
         let token = req.headers["x-access-token"] || req.headers["authorization"]
         if(!token){
@@ -29,8 +29,16 @@ export const loginReqValidator = (req, res, next) => {
                 })
                 return
             }
-
-            next()
+            if(decoded.id == req.body.id){
+                next()
+                return
+            }
+            else {
+                res.status(401).json({
+                        err: "Not Auth user"
+                    }
+                )
+            }
         })
     } catch (e) {
         res.status(400).json({
